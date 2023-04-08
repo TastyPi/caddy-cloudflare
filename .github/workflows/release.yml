@@ -15,7 +15,16 @@ jobs:
         shell: bash
         run: |
           TAG=$(grep "FROM caddy:" Dockerfile | grep -v "builder" | cut -d ":" -f 2)
-          gh release create "$TAG" --generate-notes
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+      - uses: docker/setup-buildx-action@v2
+      - uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags:
+            - ghcr.io/${{github.repository}}/caddy-cloudflare:latest
+            - ghcr.io/${{github.repository}}/caddy-cloudflare:alpine
+            - ghcr.io/${{github.repository}}/caddy-cloudflare:${{steps.tag.outputs.tag}}
+      - shell: bash
+        run: gh release create "$TAG" --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}
-      
