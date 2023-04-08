@@ -1,16 +1,16 @@
 version: 2
 updates:
-  - package-ecosystem: docker
+  - package-ecosystem: "docker"
     directory: "/"
     schedule:
-      interval: daily
+      interval: "daily"
     commit-message:
-      prefix: feat
-    labels: docker
-  - package-ecosystem: github-actions
+      prefix: "feat"
+    labels: "docker"
+  - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: daily
+      interval: "daily"
     commit-message:
-      prefix: chore
-    labels: github-actions
+      prefix: "chore"
+    labels: "github-actions"
