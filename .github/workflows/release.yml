@@ -1,0 +1,21 @@
+name: Release
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - id: tag
+        shell: bash
+        run: |
+          TAG=$(grep "FROM caddy:" Dockerfile | grep -v "builder" | cut -d ":" -f 2)
+          gh release create "$TAG" --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+      
