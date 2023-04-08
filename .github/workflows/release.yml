@@ -20,10 +20,7 @@ jobs:
       - uses: docker/build-push-action@v4
         with:
           push: true
-          tags:
-            - ghcr.io/${{github.repository}}/caddy-cloudflare:latest
-            - ghcr.io/${{github.repository}}/caddy-cloudflare:alpine
-            - ghcr.io/${{github.repository}}/caddy-cloudflare:${{steps.tag.outputs.tag}}
+          tags: ghcr.io/${{github.repository}}/caddy-cloudflare:latest,ghcr.io/${{github.repository}}/caddy-cloudflare:alpine,ghcr.io/${{github.repository}}/caddy-cloudflare:${{steps.tag.outputs.tag}}
       - shell: bash
         run: gh release create "$TAG" --generate-notes
         env:
