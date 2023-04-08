@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      packages: write
     steps:
       - uses: actions/checkout@v3
       - id: tags
@@ -16,14 +17,15 @@ jobs:
         run: |
           BASE=ghcr.io/${{github.repository}}
           BASE=${BASE,,} # lowercase
-          TAGS="${BASE}:lastest,${BASE}:alpine,${BASE}:$(grep "FROM caddy:" Dockerfile | grep -v "builder" | cut -d ":" -f 2)"
-          echo "tags=$TAGS" >> $GITHUB_OUTPUT
+          TAG=$(grep "FROM caddy:" Dockerfile | grep -v "builder" | cut -d ":" -f 2)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "tags=$BASE:latest,$BASE:alpine,$BASE:$TAG" >> $GITHUB_OUTPUT
       - uses: docker/setup-buildx-action@v2
       - uses: docker/build-push-action@v4
         with:
           push: true
           tags: ${{steps.tags.outputs.tags}}
       - shell: bash
-        run: gh release create "$TAG" --generate-notes
+        run: gh release create "${{steps.tags.output.tag}}" --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}
