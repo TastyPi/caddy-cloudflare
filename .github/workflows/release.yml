@@ -19,6 +19,7 @@ jobs:
           BASE=${BASE,,} # lowercase
           TAG=$(grep "FROM caddy:" Dockerfile | grep -v "builder" | cut -d ":" -f 2)
           echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "latest=$BASE:latest" >> $GITHUB_OUTPUT
           echo "tags=$BASE:latest,$BASE:alpine,$BASE:$TAG" >> $GITHUB_OUTPUT
       - uses: docker/login-action@v2
         with:
@@ -30,6 +31,8 @@ jobs:
         with:
           push: true
           tags: ${{steps.tags.outputs.tags}}
+          cache-from: type=registry,ref=${{steps.tags.outputs.latest}}
+          cache-to: type=inline
       - shell: bash
         run: gh release create "${{steps.tags.outputs.tag}}" --generate-notes
         env:
