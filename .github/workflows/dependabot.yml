@@ -10,7 +10,7 @@ permissions:
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    if: ${{github.actor == 'dependabot[bot]' && github.event.label.name == 'docker'}}
+    if: ${{github.actor == 'dependabot[bot]' && contains(github.event.labels.*.name, 'docker')}}
     steps:
       - name: Approve a PR
         run: |
