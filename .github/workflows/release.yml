@@ -21,7 +21,7 @@ jobs:
           echo "tag=$TAG" >> $GITHUB_OUTPUT
           echo "latest=$BASE:latest" >> $GITHUB_OUTPUT
           echo "tags=$BASE:latest,$BASE:alpine,$BASE:$TAG" >> $GITHUB_OUTPUT
-      - uses: docker/login-action@v2
+      - uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
